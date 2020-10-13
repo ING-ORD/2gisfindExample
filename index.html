@@ -25,6 +25,14 @@
         DG.then(function () {
             var map,
             marker;
+
+            function changeInputValue (latlng, cls = '.js-maps__mark') {
+                if (latlng){
+                    return $(cls).val(latlng.lat+', '+latlng.lng)
+                }
+                return false;
+            }
+
             map = DG.map('map_placemark', {
                 center: $('.js-maps').data('mark').split(', '),
                 zoom: 17
@@ -35,23 +43,17 @@
             }).addTo(map);
 
             marker.on('drag', function(e) {
-                console.log(e);
-                var lat = e.target._latlng.lat,
-                lng = e.target._latlng.lng;
-                $('.js-maps__mark').val(lat+', '+lng);
+                changeInputValue(e.latlng)
             });
 
             map.on('click', function (e){
-                marker.setLatLng(e.latlng)
+                var latlng = e.latlng;
+                marker.setLatLng(latlng)
+                changeInputValue(latlng)
             }); 
             
             $('.form-control_find-btn').on('click', (e) => {
                 e.preventDefault();
-
-                // console.log(map);
-                // var geoObject = map.geocoder.get("Первомайская 10");
-                // console.log(geoObject.getAttributes());
-
             });
         });
 
